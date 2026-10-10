@@ -1,0 +1,6 @@
+{
+  "name": "YaarBox",
+  "description": "YaarBox - Friends Messenger, Audio & Video Calls, Stories, and Real-time Status",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
