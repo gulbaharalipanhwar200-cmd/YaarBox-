@@ -17,6 +17,8 @@ import com.example.data.Story
 import com.example.data.YaarBoxAiEngine
 import com.example.data.YaarBoxSoundService
 import com.example.data.YaarBoxTtsEngine
+import com.example.data.YaarTokComment
+import com.example.data.YaarTokVideo
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,7 +56,15 @@ data class YaarBoxUiState(
   val aiResponse: String = "جی حکم کریں یار! میں آپ کا ڈیجیٹل یار ہوں، کال، میسج، ترجمہ یا کچھ بھی بولیں۔",
   val isAiThinking: Boolean = false,
   val isAiListening: Boolean = false,
-  val autoAiOnStart: Boolean = true
+  val autoAiOnStart: Boolean = true,
+  // YaarTok Reels State
+  val videos: List<YaarTokVideo> = SampleData.initialVideos,
+  val videoComments: Map<String, List<YaarTokComment>> = mapOf(
+    "video_1" to SampleData.sampleComments,
+    "video_2" to SampleData.sampleComments,
+    "video_3" to SampleData.sampleComments,
+    "video_4" to SampleData.sampleComments
+  )
 )
 
 class YaarBoxViewModel : ViewModel() {
@@ -166,6 +176,7 @@ class YaarBoxViewModel : ViewModel() {
               _uiState.update { it.copy(currentTab = NavigationTab.FRIENDS) }
               _uiState.value.stories.firstOrNull()?.let { openStory(it) }
             }
+            "yaartok" -> setTab(NavigationTab.YAARTOK)
             "chats" -> setTab(NavigationTab.CHATS)
             "calls" -> setTab(NavigationTab.CALLS)
             "profile" -> setTab(NavigationTab.PROFILE)
@@ -486,6 +497,58 @@ class YaarBoxViewModel : ViewModel() {
   fun toggleSound(enabled: Boolean) {
     YaarBoxSoundService.setSoundEnabled(enabled)
     _uiState.update { it.copy(soundEnabled = enabled) }
+  }
+
+  // YaarTok Video Feed Interactions
+  fun toggleLikeVideo(videoId: String) {
+    YaarBoxSoundService.playPopSound()
+    _uiState.update { state ->
+      val updated = state.videos.map { vid ->
+        if (vid.id == videoId) {
+          val nextLiked = !vid.isLiked
+          vid.copy(
+            isLiked = nextLiked,
+            likesCount = if (nextLiked) vid.likesCount + 1 else vid.likesCount - 1
+          )
+        } else vid
+      }
+      state.copy(videos = updated)
+    }
+  }
+
+  fun toggleFollowCreator(videoId: String) {
+    YaarBoxSoundService.playPopSound()
+    _uiState.update { state ->
+      val updated = state.videos.map { vid ->
+        if (vid.id == videoId) {
+          vid.copy(isFollowed = !vid.isFollowed)
+        } else vid
+      }
+      state.copy(videos = updated)
+    }
+  }
+
+  fun addVideoComment(videoId: String, text: String) {
+    if (text.isBlank()) return
+    YaarBoxSoundService.playPopSound()
+    val newComment = YaarTokComment(
+      id = UUID.randomUUID().toString(),
+      authorName = _uiState.value.myName,
+      authorAvatarRes = null,
+      text = text.trim(),
+      timeAgo = "Just now",
+      likes = 0
+    )
+    _uiState.update { state ->
+      val existing = state.videoComments[videoId] ?: emptyList()
+      val updatedVideos = state.videos.map { vid ->
+        if (vid.id == videoId) vid.copy(commentsCount = vid.commentsCount + 1) else vid
+      }
+      state.copy(
+        videos = updatedVideos,
+        videoComments = state.videoComments + (videoId to (listOf(newComment) + existing))
+      )
+    }
   }
 
   fun toggleMyOnlineStatus() {

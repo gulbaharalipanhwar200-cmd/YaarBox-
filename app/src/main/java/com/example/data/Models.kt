@@ -3,6 +3,7 @@ package com.example.data
 enum class NavigationTab(val labelUrdu: String, val labelEn: String) {
   CHATS("چیٹس", "Chats"),
   FRIENDS("دوست", "Friends"),
+  YAARTOK("یا ٹوک", "YaarTok"),
   CALLS("کالز", "Calls"),
   PROFILE("پروفائل", "Profile")
 }
@@ -79,4 +80,31 @@ data class ActiveCall(
   val isSpeakerOn: Boolean = false,
   val isVideoEnabled: Boolean = true,
   val isFrontCamera: Boolean = true
+)
+
+data class YaarTokVideo(
+  val id: String,
+  val videoUrl: String,
+  val creatorName: String,
+  val username: String,
+  val creatorAvatarRes: Int? = null,
+  val creatorAvatarUrl: String? = null,
+  val caption: String,
+  val songTitle: String = "Original Sound - YaarBox",
+  val likesCount: Int = 12500,
+  val commentsCount: Int = 1200,
+  val sharesCount: Int = 450,
+  val isLiked: Boolean = false,
+  val isFollowed: Boolean = false,
+  val bgGradientStart: Long = 0xFF0F172A,
+  val bgGradientEnd: Long = 0xFF020617
+)
+
+data class YaarTokComment(
+  val id: String,
+  val authorName: String,
+  val authorAvatarRes: Int? = null,
+  val text: String,
+  val timeAgo: String,
+  val likes: Int = 12
 )

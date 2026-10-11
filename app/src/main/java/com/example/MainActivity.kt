@@ -40,10 +40,12 @@ import com.example.ui.screens.ChatsScreen
 import com.example.ui.screens.FriendsScreen
 import com.example.ui.screens.ProfileScreen
 import com.example.ui.screens.StoryViewerScreen
+import com.example.ui.screens.YaarTokScreen
 import com.example.ui.theme.YaarBoxTheme
 import com.example.ui.theme.YaarCyan
 import com.example.ui.theme.YaarDarkBg
 import com.example.ui.theme.YaarGreen
+import com.example.viewmodel.FriendListViewModel
 import com.example.viewmodel.YaarBoxViewModel
 
 class MainActivity : ComponentActivity() {
@@ -60,10 +62,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun YaarBoxApp(
-  viewModel: YaarBoxViewModel = viewModel()
+  viewModel: YaarBoxViewModel = viewModel(),
+  friendListViewModel: FriendListViewModel = viewModel()
 ) {
   val context = LocalContext.current
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+  val friendListState by friendListViewModel.uiState.collectAsStateWithLifecycle()
+  val friendsListFromVm by friendListViewModel.filteredFriends.collectAsStateWithLifecycle()
 
   LaunchedEffect(Unit) {
     viewModel.initializeTts(context)
@@ -139,8 +144,14 @@ fun YaarBoxApp(
       YaarBoxTopBar(
         isSearching = uiState.isSearchActive,
         searchQuery = uiState.searchQuery,
-        onSearchQueryChanged = { viewModel.setSearchQuery(it) },
-        onToggleSearch = { viewModel.toggleSearch(it) },
+        onSearchQueryChanged = {
+          viewModel.setSearchQuery(it)
+          friendListViewModel.setSearchQuery(it)
+        },
+        onToggleSearch = {
+          viewModel.toggleSearch(it)
+          if (!it) friendListViewModel.setSearchQuery("")
+        },
         onAiClick = { viewModel.openAiAssistant(greeting = true) },
         onProfileClick = { viewModel.setTab(NavigationTab.PROFILE) }
       )
@@ -161,13 +172,20 @@ fun YaarBoxApp(
       when (uiState.currentTab) {
         NavigationTab.FRIENDS -> {
           FriendsScreen(
-            friends = filteredFriends,
+            friends = friendsListFromVm,
             stories = uiState.stories,
             onFriendClick = { viewModel.openChat(it) },
             onCallClick = { friend, type -> viewModel.startCall(friend, type) },
             onStoryClick = { viewModel.openStory(it) },
             onAddStoryClick = { viewModel.openAddStoryDialog() },
-            onAddFriendClick = { viewModel.openAddFriendDialog() }
+            onAddFriendClick = { viewModel.openAddFriendDialog() },
+            onToggleOnlineStatus = { friendId ->
+              friendListViewModel.toggleFriendOnlineStatus(friendId)
+            },
+            filterOnlyOnline = friendListState.filterOnlyOnline,
+            onToggleFilterOnline = {
+              friendListViewModel.toggleFilterOnlyOnline()
+            }
           )
 
           // Floating AI button for quick voice command on Friends screen
@@ -195,6 +213,17 @@ fun YaarBoxApp(
             chatMessages = uiState.chatMessages,
             onChatClick = { viewModel.openChat(it) },
             onNewChatClick = { viewModel.openAddFriendDialog() }
+          )
+        }
+
+        NavigationTab.YAARTOK -> {
+          YaarTokScreen(
+            videos = uiState.videos,
+            commentsMap = uiState.videoComments,
+            friendsList = uiState.friends,
+            onToggleLike = { viewModel.toggleLikeVideo(it) },
+            onToggleFollow = { viewModel.toggleFollowCreator(it) },
+            onAddComment = { videoId, comment -> viewModel.addVideoComment(videoId, comment) }
           )
         }
 
@@ -240,6 +269,7 @@ fun YaarBoxApp(
       onDismiss = { viewModel.closeAddFriendDialog() },
       onAddFriend = { name, phone, status ->
         viewModel.addFriend(name, phone, status)
+        friendListViewModel.addFriend(name, phone, status)
       }
     )
   }

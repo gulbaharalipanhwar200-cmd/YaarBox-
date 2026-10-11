@@ -256,4 +256,74 @@ object SampleData {
       duration = "1 min 45 sec"
     )
   )
+
+  val initialVideos = listOf(
+    YaarTokVideo(
+      id = "video_1",
+      videoUrl = "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
+      creatorName = "Sara Khan",
+      username = "@sara_khan",
+      creatorAvatarRes = R.drawable.avatar_sara,
+      caption = "میری پہلی YaarBox ویڈیو ❤️ دوستوں کے ساتھ نیا تجربہ! #YaarBox #YaarTok #GoodVibes",
+      songTitle = "Original Sound - Dil Diyan Gallan (YaarBox Remix)",
+      likesCount = 14200,
+      commentsCount = 1320,
+      sharesCount = 540,
+      isLiked = false,
+      bgGradientStart = 0xFF0D6352,
+      bgGradientEnd = 0xFF10B981
+    ),
+    YaarTokVideo(
+      id = "video_2",
+      videoUrl = "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+      creatorName = "Areeb",
+      username = "@areeb_official",
+      creatorAvatarRes = R.drawable.avatar_areeb,
+      caption = "سفر اور فطرت کے حسین رنگ 🦋🌿 YaarBox squad trip! #YaarTok #Travel #NatureVibes",
+      songTitle = "Original Sound - Pasoori Lo-Fi Mix",
+      likesCount = 28500,
+      commentsCount = 2410,
+      sharesCount = 1120,
+      isLiked = true,
+      bgGradientStart = 0xFF7C3AED,
+      bgGradientEnd = 0xFFEC4899
+    ),
+    YaarTokVideo(
+      id = "video_3",
+      videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      creatorName = "Alex Chen",
+      username = "@alex_chen",
+      creatorAvatarUrl = "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80",
+      caption = "Weekend gaming and coding party with the yaars 🔥🎮 Who wants to squad up? #Gaming #Friends",
+      songTitle = "Original Sound - YaarBox Electronic Beats",
+      likesCount = 9800,
+      commentsCount = 890,
+      sharesCount = 310,
+      isLiked = false,
+      bgGradientStart = 0xFF2563EB,
+      bgGradientEnd = 0xFF06B6D4
+    ),
+    YaarTokVideo(
+      id = "video_4",
+      videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      creatorName = "Ryan Lee",
+      username = "@ryan_lee",
+      creatorAvatarUrl = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+      caption = "Night drive vibes in Lahore 🌙🚗 کبھی کبھی تنہائی بھی خوبصورت ہوتی ہے۔ #NightDrive #YaarBox",
+      songTitle = "Original Sound - Coke Studio Vibes",
+      likesCount = 34100,
+      commentsCount = 3980,
+      sharesCount = 1890,
+      isLiked = false,
+      bgGradientStart = 0xFFDC2626,
+      bgGradientEnd = 0xFFF97316
+    )
+  )
+
+  val sampleComments = listOf(
+    YaarTokComment("c1", "Ali", R.drawable.avatar_areeb, "واہ یار! بہت ہی زبردست ویڈیو ہے 🔥❤️", "2m ago", 34),
+    YaarTokComment("c2", "Sara Khan", R.drawable.avatar_sara, "Next video meri taraf se aayegi! 😍", "5m ago", 82),
+    YaarTokComment("c3", "Emma", null, "Loving the YaarBox update! So clean 🚀", "12m ago", 15),
+    YaarTokComment("c4", "Zoya", null, "سچی دوستی ہمیشہ قائم رہتی ہے ❤️✨", "25m ago", 48)
+  )
 }

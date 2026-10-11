@@ -71,14 +71,16 @@ class YaarBoxAiEngine {
     if (lower.contains("کھولو") || lower.contains("open") || lower.contains("دکھاؤ")) {
       val screen = when {
         lower.contains("اسٹوری") || lower.contains("story") || lower.contains("سٹیٹس") -> "stories"
+        lower.contains("ٹک ٹاک") || lower.contains("tiktok") || lower.contains("yaartok") || lower.contains("ویڈیو") || lower.contains("reels") -> "yaartok"
         lower.contains("چیٹ") || lower.contains("chat") -> "chats"
         lower.contains("کال") || lower.contains("call") -> "calls"
         lower.contains("پروفائل") || lower.contains("profile") -> "profile"
         else -> "friends"
       }
+      val spoken = if (screen == "yaartok") "YaarTok ویڈیوز کھول رہا ہوں" else "کھول رہا ہوں"
       return@withContext AiActionResult.OpenScreenAction(
         screenName = screen,
-        spokenConfirmation = "کھول رہا ہوں"
+        spokenConfirmation = spoken
       )
     }
 

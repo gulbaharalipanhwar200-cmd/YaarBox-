@@ -66,7 +66,10 @@ fun FriendsScreen(
   onStoryClick: (Story) -> Unit,
   onAddStoryClick: () -> Unit,
   onAddFriendClick: () -> Unit,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  onToggleOnlineStatus: ((String) -> Unit)? = null,
+  filterOnlyOnline: Boolean = false,
+  onToggleFilterOnline: (() -> Unit)? = null
 ) {
   val onlineCount = friends.count { it.isOnline }
 
@@ -231,14 +234,42 @@ fun FriendsScreen(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
       ) {
-        Text(
-          text = "Friends — $onlineCount Online",
-          style = MaterialTheme.typography.titleMedium.copy(
-            fontWeight = FontWeight.Bold,
-            color = YaarTextPrimary,
-            fontSize = 16.sp
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          modifier = Modifier
+            .then(
+              if (onToggleFilterOnline != null) Modifier.clickable { onToggleFilterOnline() }
+              else Modifier
+            )
+            .testTag("filter_online_toggle")
+        ) {
+          Text(
+            text = "Friends — $onlineCount Online",
+            style = MaterialTheme.typography.titleMedium.copy(
+              fontWeight = FontWeight.Bold,
+              color = YaarTextPrimary,
+              fontSize = 16.sp
+            )
           )
-        )
+
+          if (filterOnlyOnline) {
+            Spacer(modifier = Modifier.width(8.dp))
+            Box(
+              modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .background(YaarGreen.copy(alpha = 0.2f))
+                .border(1.dp, YaarGreen, RoundedCornerShape(10.dp))
+                .padding(horizontal = 6.dp, vertical = 2.dp)
+            ) {
+              Text(
+                text = "Online Only",
+                color = YaarGreen,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold
+              )
+            }
+          }
+        }
 
         IconButton(
           onClick = onAddFriendClick,
@@ -261,7 +292,8 @@ fun FriendsScreen(
       FriendRowItem(
         friend = friend,
         onChatClick = { onFriendClick(friend) },
-        onCallClick = { onCallClick(friend, CallType.VOICE) }
+        onCallClick = { onCallClick(friend, CallType.VOICE) },
+        onToggleOnline = { onToggleOnlineStatus?.invoke(friend.id) }
       )
     }
   }
@@ -271,7 +303,8 @@ fun FriendsScreen(
 private fun FriendRowItem(
   friend: Friend,
   onChatClick: () -> Unit,
-  onCallClick: () -> Unit
+  onCallClick: () -> Unit,
+  onToggleOnline: () -> Unit = {}
 ) {
   Row(
     modifier = Modifier
@@ -281,14 +314,15 @@ private fun FriendRowItem(
       .testTag("friend_row_${friend.id}"),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    // Avatar with green online dot
+    // Avatar with green online dot (tap toggles online status)
     YaarAvatar(
       name = friend.name,
       avatarRes = friend.avatarRes,
       avatarUrl = friend.avatarUrl,
       size = 54.dp,
       showOnlineDot = true,
-      isOnline = friend.isOnline
+      isOnline = friend.isOnline,
+      onClick = onToggleOnline
     )
 
     Spacer(modifier = Modifier.width(14.dp))

@@ -40,8 +40,8 @@ object YaarBoxSoundService {
           durationMs = 120,
           pauseMs = 25
         )
-      } catch (e: CancellationException) {
-        throw e
+      } catch (_: CancellationException) {
+        // Normal cancellation
       } catch (e: Exception) {
         Log.e(TAG, "Failed playing open sound", e)
         fallbackTone(ToneGenerator.TONE_PROP_ACK)
@@ -57,8 +57,8 @@ object YaarBoxSoundService {
     scope.launch {
       try {
         playPopWaveform()
-      } catch (e: CancellationException) {
-        throw e
+      } catch (_: CancellationException) {
+        // Normal cancellation
       } catch (e: Exception) {
         Log.e(TAG, "Failed playing pop sound", e)
         fallbackTone(ToneGenerator.TONE_PROP_BEEP)
@@ -78,11 +78,13 @@ object YaarBoxSoundService {
           playDualTone(freq1 = 440.0, freq2 = 480.0, durationMs = 1200)
           delay(1800)
         }
-      } catch (e: CancellationException) {
-        // Normal cancellation when call is accepted/declined/ended
-      } catch (e: Exception) {
-        Log.e(TAG, "Ring error", e)
-        fallbackTone(ToneGenerator.TONE_SUP_RINGTONE)
+      } catch (e: Throwable) {
+        if (e is CancellationException || e.javaClass.name.contains("Cancellation")) {
+          // Normal cancellation when call is accepted/declined/ended
+        } else {
+          Log.e(TAG, "Ring error", e)
+          fallbackTone(ToneGenerator.TONE_SUP_RINGTONE)
+        }
       } finally {
         stopActiveTrack()
       }
@@ -120,8 +122,8 @@ object YaarBoxSoundService {
           durationMs = 160,
           pauseMs = 40
         )
-      } catch (e: CancellationException) {
-        throw e
+      } catch (_: CancellationException) {
+        // Normal cancellation
       } catch (e: Exception) {
         fallbackTone(ToneGenerator.TONE_PROP_PROMPT)
       }

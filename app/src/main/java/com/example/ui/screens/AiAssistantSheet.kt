@@ -27,11 +27,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MicOff
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -270,7 +270,7 @@ fun AiAssistantSheet(
               onClick = onSpeakAgain,
               modifier = Modifier.size(28.dp).testTag("speak_again_button")
             ) {
-              Icon(Icons.Default.VolumeUp, contentDescription = "Listen Again", tint = YaarCyan, modifier = Modifier.size(18.dp))
+              Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Listen Again", tint = YaarCyan, modifier = Modifier.size(18.dp))
             }
           }
 
@@ -302,6 +302,7 @@ fun AiAssistantSheet(
       Spacer(modifier = Modifier.height(8.dp))
 
       val presetCommands = listOf(
+        "🎬 YaarTok ویڈیوز کھولو",
         "📞 علی کو کال لگاؤ",
         "📞 سارہ کو کال کرو",
         "💬 سارہ کو میسج کرو میں آ رہا ہوں",

@@ -19,10 +19,12 @@ import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.PeopleAlt
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.PeopleOutline
 import androidx.compose.material.icons.outlined.PersonOutline
+import androidx.compose.material.icons.outlined.PlayCircleOutline
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Divider
@@ -75,6 +77,7 @@ fun YaarBoxBottomBar(
         val (icon, selectedIcon) = when (tab) {
           NavigationTab.CHATS -> Pair(Icons.Outlined.ChatBubbleOutline, Icons.Filled.ChatBubble)
           NavigationTab.FRIENDS -> Pair(Icons.Outlined.PeopleOutline, Icons.Filled.PeopleAlt)
+          NavigationTab.YAARTOK -> Pair(Icons.Outlined.PlayCircleOutline, Icons.Filled.PlayCircle)
           NavigationTab.CALLS -> Pair(Icons.Outlined.Call, Icons.Filled.Call)
           NavigationTab.PROFILE -> Pair(Icons.Outlined.PersonOutline, Icons.Filled.Person)
         }
